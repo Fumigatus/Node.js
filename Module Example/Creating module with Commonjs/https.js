@@ -1,7 +1,11 @@
 // const { send } = require('./request')
-const { send } = require('./request')
-const { read } = require('./response')
-const { REQUEST_TIMEOUT } = require('./request')
+// const { send } = require('./request')
+// const { read } = require('./response')
+// const { REQUEST_TIMEOUT } = require('./request')
+
+// const internals = require('./internals') -> internals.request.send(....) internals.response.read(....)
+
+const {send, read, REQUEST_TIMEOUT} = require('./internals')
 
 
 
