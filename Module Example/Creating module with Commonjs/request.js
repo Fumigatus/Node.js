@@ -17,3 +17,6 @@ module.exports = {
     send,
     REQUEST_TIMEOUT
 }
+
+// Hello from reques! printed terminal one time because of module caching
+console.log('Hello from request!')
