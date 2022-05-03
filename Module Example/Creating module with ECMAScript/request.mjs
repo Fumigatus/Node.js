@@ -1,6 +1,6 @@
 // module.exports.REQUEST_TIMEOUT=500
 // exports.REQUEST_TIMEOUT = 500
-const REQUEST_TIMEOUT=500
+const REQUEST_TIMEOUT = 500
 
 function encrypt(data) {
     return 'encrypted data'
@@ -13,7 +13,14 @@ function send(url, data) {
     console.log(`sending ${encryptedData} to ${url}`)
 }
 
-module.exports = {
+// - if we are using ecmascript modules
+export {
     REQUEST_TIMEOUT,
     send
 }
+
+/* - if we are using commonjs modules
+module.exports = {
+    REQUEST_TIMEOUT,
+    send
+}*/
