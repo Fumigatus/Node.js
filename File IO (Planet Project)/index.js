@@ -22,7 +22,10 @@ fs.createReadStream('kepler.csv')
     .on('error', err => console.log(err))
     .on('end', () => {
         console.log('Habitable planets;')
+        // console.log(result.map(planet=>{
+        //     return planet['kepler_name']
+        // }))
         for(x of result){
-            console.log(x['kepler_name'])
+            console.log(x['kepid'],'|',x['kepler_name'])
         }
     })
