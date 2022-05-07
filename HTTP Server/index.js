@@ -21,11 +21,16 @@ server.on('request', (req, res) => {
     const urlItems = req.url.split('/')
     // /friends/2 => ['','friends','2']
 
-    if (urlItems[1] === 'friends') {
+    if (req.method == 'POST' && urlItems[1] == 'friends') {
+        req.on('data', data => {
+            friends.push(JSON.parse(data))
+            console.log(data.toString())
+        })
+    } else if (req.method == 'GET' && urlItems[1] == 'friends') {
         // res.writeHead(200,{
         //     'Content-type': 'application/json',
         // })
-        res.statusCode=200
+        res.statusCode = 200
         res.setHeader('Content-type', 'application/json')
 
         if (urlItems.length === 3) {
@@ -34,7 +39,7 @@ server.on('request', (req, res) => {
         } else {
             res.end(JSON.stringify(friends))
         }
-    } else if (urlItems[1] === 'messages') {
+    } else if (req.method == 'GET' && urlItems[1] === 'messages') {
         res.writeHead(200, {
             'Content-type': 'text/html'
         })
