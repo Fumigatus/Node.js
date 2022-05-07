@@ -26,6 +26,7 @@ server.on('request', (req, res) => {
             friends.push(JSON.parse(data))
             console.log(data.toString())
         })
+        req.pipe(res)
     } else if (req.method == 'GET' && urlItems[1] == 'friends') {
         // res.writeHead(200,{
         //     'Content-type': 'application/json',
