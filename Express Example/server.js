@@ -17,6 +17,13 @@ const friends = [
     }
 ]
 
+app.use((req, res, next) => {
+    const start = Date.now()
+    next()
+    const delta = Date.now() - start
+    console.log(`${req.method} ${req.url} ${delta}ms`)
+})
+
 app.get('/', (req, res) => {
     res.send('Main Page')
 })
@@ -27,11 +34,11 @@ app.get('/friends', (req, res) => {
 
 // GET /friends/index
 app.get('/friends/:friendIndex', (req, res) => {
-    const friendIndex= +req.params.friendIndex
-    const friend=friends[friendIndex]
-    if(friend){
+    const friendIndex = +req.params.friendIndex
+    const friend = friends[friendIndex]
+    if (friend) {
         res.status(200).json(friend)
-    }else{
+    } else {
         res.status(404).send('Page Not Found')
     }
 })
