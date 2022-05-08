@@ -1,21 +1,11 @@
 const express = require('express')
+const friendsController = require('./controllers/friends_controllers')
+const messagesController = require('./controllers/messages_controller')
+
 
 const app = express()
 const PORT = 3000
-const friends = [
-    {
-        id: 0,
-        name: 'Albert Einstein'
-    },
-    {
-        id: 1,
-        name: 'Sir Isaac Newton'
-    },
-    {
-        id: 2,
-        name: 'Aristoteles'
-    }
-]
+
 
 app.use((req, res, next) => {
     const start = Date.now()
@@ -26,46 +16,18 @@ app.use((req, res, next) => {
 
 app.use(express.json())
 
-app.post('/friends', (req, res) => {
-    if(!req.body.name){
-        return res.status(200).json({
-            error: 'Invalid Name'
-        })
-    }
-    const newFriend = {
-        name: req.body.name,
-        id: friends.length
-    }
-    friends.push(newFriend)
-    res.json(newFriend)
-})
+app.post('/friends', friendsController.postNewFriend)
 
-app.get('/', (req, res) => {
-    res.send('Main Page')
-})
+app.get('/', (req, res) => { res.send('Main Page') })
 
-app.get('/friends', (req, res) => {
-    res.json(friends)
-})
+app.get('/friends', friendsController.getFriends)
 
 // GET /friends/index
-app.get('/friends/:friendIndex', (req, res) => {
-    const friendIndex = +req.params.friendIndex
-    const friend = friends[friendIndex]
-    if (friend) {
-        res.status(200).json(friend)
-    } else {
-        res.status(404).send('Page Not Found')
-    }
-})
+app.get('/friends/:friendIndex', friendsController.getFriendByIndex)
 
-app.get('/messages', (req, res) => {
-    res.send('<ul><li>Messages Page</li></ul>')
-})
+app.get('/messages', messagesController.getMessages)
 
-app.post('/messages', (req, res) => {
-    console.log('Updating Messages')
-})
+app.post('/messages', messagesController.postMessages)
 
 app.listen(PORT, () => {
     console.log(`listening port ${PORT}`)
