@@ -7,6 +7,8 @@ const messagesRouter = require('./route/messages_route')
 const app = express()
 const PORT = 3000
 
+app.set('view engine', 'hbs')
+app.set('views', path.join(__dirname, 'views'))
 
 app.use((req, res, next) => {
     const start = Date.now()
@@ -17,13 +19,20 @@ app.use((req, res, next) => {
 
 app.use(express.json())
 
-app.use('/friends',friendsRouter)
+app.get('/', (req, res) => {
+    res.render('index',{
+        title: 'Templatin Engine',
+        caption: 'Express is a backend framework',
+    })
+})
 
-app.use('/site',express.static('public'))
+app.use('/friends', friendsRouter)
 
-app.use('/messages',messagesRouter)
+app.use('/site', express.static('public'))
 
-app.get('/', (req, res) => { res.send('Main Page') })
+app.use('/messages', messagesRouter)
+
+// app.get('/', (req, res) => { res.send('Main Page') })
 
 app.listen(PORT, () => {
     console.log(`listening port ${PORT}`)
