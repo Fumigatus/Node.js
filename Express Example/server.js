@@ -1,8 +1,8 @@
 const express = require('express')
+const path = require('path')
 
 const friendsRouter = require('./route/friends_route')
 const messagesRouter = require('./route/messages_route')
-
 
 const app = express()
 const PORT = 3000
@@ -18,6 +18,8 @@ app.use((req, res, next) => {
 app.use(express.json())
 
 app.use('/friends',friendsRouter)
+
+app.use('/site',express.static('public'))
 
 app.use('/messages',messagesRouter)
 

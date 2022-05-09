@@ -1,7 +1,7 @@
 const path = require('path') // unix=>/folder/filename windows=> \folder\filename
 
 function getMessages(req, res) {
-    res.sendFile(path.join(__dirname,'..','public','mountain.jpg'))
+    res.sendFile(path.join(__dirname,'..','public','images','mountain.jpg'))
     // res.send('<ul><li>Messages Page</li></ul>')
 }
 
