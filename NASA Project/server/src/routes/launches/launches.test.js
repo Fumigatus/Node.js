@@ -13,13 +13,39 @@ describe('Test GET /launches', () => {
 })
 
 describe('Test POST /launches', () => {
-    test('IT should respond 200', () => {
+    const launch = {
+        mission: 'To the Moon',
+        rocket: 'XKJ-11D',
+        target: 'Kepler-442 b',
+        launchDate: 'January 11, 2026'
+    }
 
-    })
-    test('Missing required properties control', () => {
+    const launchWithoutDate = {
+        mission: 'To the Moon',
+        rocket: 'XKJ-11D',
+        target: 'Kepler-442 b',
+    }
+    test('IT should respond 201', async () => {
+        const response = await request(app)
+            .post('/launches')
+            .send(launch)
+            .expect('Content-Type', /json/)
+            .expect(201)
 
-    })
-    test('Invalid date control', () => {
+        const requestDate = new Date(launch.launchDate).valueOf()
+        const responseDate = new Date(response.body.launchDate).valueOf()
+        expect(requestDate).toBe(responseDate)
 
+        expect(response.body).toMatchObject(launchWithoutDate)
     })
+
+})
+
+
+
+test('Missing required properties control', () => {
+
+})
+test('Invalid date control', () => {
+
 })
