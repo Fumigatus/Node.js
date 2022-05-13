@@ -10,8 +10,8 @@
     "server": "npm run watch --prefix server",
     "client": "npm start --prefix client",
     "watch": "npm run server & npm run client",
-    "deploy": "npm run build --prefix client & npm run server --perfix server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "npm run build --prefix client && npm run server --perfix server",
+    "test": "npm test --prefix client && npm test --prefix server"
   },
   "keywords": [],
   "author": "",
