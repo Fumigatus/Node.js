@@ -17,7 +17,7 @@ app.use(express.json())
 app.use(express.static(PATH.join(__dirname, '..', 'public')))
 
 
-app.use(planetsRouter)
+app.use('/planets',planetsRouter)
 app.use('/launches',launchesRouter)
 app.get('/*', (request, response) => {
     response.sendFile(PATH.join(__dirname, '..', 'public', 'index.html'))

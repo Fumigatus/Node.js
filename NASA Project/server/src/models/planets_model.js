@@ -1,7 +1,7 @@
 const planets = [];
 const fs = require('fs');
 const path = require('path');
-const {parse} = require('csv-parse');
+const { parse } = require('csv-parse');
 
 module.exports = planets;
 const habitablePlanets = [];
@@ -36,7 +36,7 @@ function loadPlanetsData() {
   });
 }
 
-function getAllPlanets(){
+function getAllPlanets() {
   return habitablePlanets
 }
 
