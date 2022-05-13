@@ -1,4 +1,9 @@
-const { getAllLaunches, addNewLaunch } = require('../../models/launches_model')
+const { 
+    getAllLaunches,
+    addNewLaunch,
+    existsLaunch,
+    abortLaunch,
+} = require('../../models/launches_model')
 
 function httpGetAllLaunches(request, response) {
     return response.status(200).json(getAllLaunches())
@@ -30,7 +35,21 @@ function httpAddNewLaunch(request, response) {
     return response.status(201).json(launch)
 }
 
+function httpAbortLaunch(request, response){
+    const launchId= Number(request.params.id)
+
+    if(!existsLaunch(launchId)){
+        return response.status(404).json({
+            error: "The flight doesn't exist."
+        })
+    }
+
+    const abortedLaunch = abortLaunch(launchId)
+    return response.status(200).json(abortedLaunch)
+}
+
 module.exports = {
     httpGetAllLaunches,
     httpAddNewLaunch,
+    httpAbortLaunch,
 }
