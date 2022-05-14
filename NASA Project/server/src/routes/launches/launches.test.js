@@ -25,7 +25,14 @@ describe('Test POST /launches', () => {
         rocket: 'XKJ-11D',
         target: 'Kepler-442 b',
     }
-    test('IT should respond 201', async () => {
+
+    const launchInvalidData={
+        mission: 'To the Moon',
+        rocket: 'XKJ-11D',
+        target: 'Kepler-442 b',
+        launchDate: 'root'
+    }
+    test('It should respond 201', async () => {
         const response = await request(app)
             .post('/launches')
             .send(launch)
@@ -39,13 +46,24 @@ describe('Test POST /launches', () => {
         expect(response.body).toMatchObject(launchWithoutDate)
     })
 
+    test('Missing required properties control', async () => {
+        const response = await request(app)
+            .post('/launches')
+            .send(launchWithoutDate)
+            .expect(400)
+        expect(response.body).toStrictEqual({
+            error: 'Missing operator'
+        })
+    })
+    test('Invalid date control', async () => {
+        const response = await request(app)
+            .post('/launches')
+            .send(launchInvalidData)
+            .expect(400)
+        expect(response.body).toStrictEqual({
+            error: 'Invalid launch date.'
+        })
+    })
 })
 
 
-
-test('Missing required properties control', () => {
-
-})
-test('Invalid date control', () => {
-
-})
