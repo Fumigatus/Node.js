@@ -17,8 +17,8 @@ app.get('/', (req, res) => {
 })
 
 app.get('/timer', (req, res) => {
-    delay(5000)
-    res.send(`Timer Page pid:${process.pid}`)
+    delay(2000)
+    res.send(`Changed Timer Page pid:${process.pid}`)
 })
 
 console.log('Worker process has been started')
