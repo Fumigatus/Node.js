@@ -8,7 +8,7 @@ const launch = {
     rocket: 'Explorer IS1',
     launchDate: new Date('December 17, 2022'),
     target: 'Kepler-442 b',
-    customer: ['NASA', 'NOAA'],
+    customers: ['NASA', 'NOAA'],
     upcoming: true,
     succes: true,
 }
@@ -26,7 +26,7 @@ function addNewLaunch(launch) {
         lastFlightNumber,
         Object.assign(launch, {
             flightNumber: lastFlightNumber,
-            customer: ['NASA', 'NOAA'],
+            customers: ['NASA', 'NOAA'],
             upcoming: true,
             succes: true,
         })
