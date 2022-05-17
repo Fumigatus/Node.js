@@ -1,4 +1,5 @@
 const launches = require('./launches_mongo')
+const planets = require('./planet_mongo')
 
 // const launches = new Map()
 
@@ -40,13 +41,22 @@ function addNewLaunch(launch) {
 }
 
 async function saveLaunch(launch) {
+    const planet = await planets.findOne({
+        keplerName: launch.target
+    })
+
+    if (!planet) {
+        throw new Error('No habitable planet with this name')
+    }
+
+
     await launches.updateOne({
         flightNumber: launch.flightNumber
     },
-    launch,
-    {
-      upsert: true
-    })
+        launch,
+        {
+            upsert: true
+        })
 }
 
 function existsLaunch(launchId) {
