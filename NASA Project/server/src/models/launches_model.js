@@ -4,7 +4,7 @@ const planets = require('./planet_mongo')
 
 // const launches = new Map()
 const DEFAULT_FLIGHT_NUMBER = 100;
-let lastFlightNumber = 100
+// let lastFlightNumber = 100
 
 const launch = {
     flightNumber: 100,
@@ -28,30 +28,6 @@ async function getAllLaunches() {
     // return Array.from(launches.values())
 }
 
-async function getLatestFlightNumber() {
-    const latestLaunch = await launches.findOne()
-        .sort('-flightNumber')
-
-    if (!latestLaunch) {
-        return DEFAULT_FLIGHT_NUMBER
-    }
-
-    return latestLaunch.flightNumber
-}
-
-function addNewLaunch(launch) {
-    lastFlightNumber++
-    launches.set(
-        lastFlightNumber,
-        Object.assign(launch, {
-            flightNumber: lastFlightNumber,
-            customers: ['NASA', 'NOAA'],
-            upcoming: true,
-            succes: true,
-        })
-    )
-}
-
 async function saveLaunch(launch) {
     const planet = await planets.findOne({
         keplerName: launch.target
@@ -71,6 +47,29 @@ async function saveLaunch(launch) {
         })
 }
 
+async function getLatestFlightNumber() {
+    const latestLaunch = await launches.findOne()
+        .sort('-flightNumber')
+
+    if (!latestLaunch) {
+        return DEFAULT_FLIGHT_NUMBER
+    }
+
+    return latestLaunch.flightNumber
+}
+
+async function addNewLaunchDB(launch) {
+    const newFligthNumber = await getLatestFlightNumber()+1
+    const newLaunch = Object.assign(launch,{
+        flightNumber:newFligthNumber,
+        upcoming: true,
+        succes: true,
+        customers: ['NASA', 'NOAA'],
+    })
+}
+
+
+
 function existsLaunch(launchId) {
     return launches.has(launchId)
 }
@@ -85,7 +84,20 @@ function abortLaunch(launchId) {
 
 module.exports = {
     getAllLaunches,
-    addNewLaunch,
+    addNewLaunchDB,
     existsLaunch,
     abortLaunch
 }
+//in memory addNewLaunch
+// function addNewLaunch(launch) {
+//     lastFlightNumber++
+//     launches.set(
+//         lastFlightNumber,
+//         Object.assign(launch, {
+//             flightNumber: lastFlightNumber,
+//             customers: ['NASA', 'NOAA'],
+//             upcoming: true,
+//             succes: true,
+//         })
+//     )
+// }

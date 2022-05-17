@@ -1,6 +1,6 @@
 const { 
     getAllLaunches,
-    addNewLaunch,
+    addNewLaunchDB,
     existsLaunch,
     abortLaunch,
 } = require('../../models/launches_model')
@@ -9,7 +9,7 @@ async function httpGetAllLaunches(request, response) {
     return response.status(200).json(await getAllLaunches())
 }
 
-function httpAddNewLaunch(request, response) {
+async function httpAddNewLaunch(request, response) {
     const launch = request.body
     if (!launch.launchDate || !launch.mission || !launch.target || !launch.rocket) {
         return response.status(400).json({
@@ -31,7 +31,7 @@ function httpAddNewLaunch(request, response) {
            error: 'Invalid launch date.'
         })
     }*/
-    addNewLaunch(launch)
+    await addNewLaunchDB(launch)
     return response.status(201).json(launch)
 }
 
