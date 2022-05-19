@@ -35,16 +35,23 @@ async function httpAddNewLaunch(request, response) {
     return response.status(201).json(launch)
 }
 
-function httpAbortLaunch(request, response){
+async function httpAbortLaunch(request, response){
     const launchId= Number(request.params.id)
 
-    if(!existsLaunch(launchId)){
+    const existlaunch= existsLaunch(launchId)
+    if(!existlaunch){
         return response.status(404).json({
             error: "The flight doesn't exist."
         })
     }
+    const abortedLaunch = await abortLaunch(launchId)
+    if (!abortedLaunch){
+        return response.status(400).json({
+            error: "The launch not aborted"
+        })
+    }
+    
 
-    const abortedLaunch = abortLaunch(launchId)
     return response.status(200).json(abortedLaunch)
 }
 

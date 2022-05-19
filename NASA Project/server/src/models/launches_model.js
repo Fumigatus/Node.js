@@ -59,27 +59,38 @@ async function getLatestFlightNumber() {
 }
 
 async function addNewLaunchDB(launch) {
-    const newFligthNumber = await getLatestFlightNumber()+1
-    const newLaunch = Object.assign(launch,{
-        flightNumber:newFligthNumber,
+    const newFligthNumber = await getLatestFlightNumber() + 1
+    const newLaunch = Object.assign(launch, {
+        flightNumber: newFligthNumber,
         upcoming: true,
         succes: true,
         customers: ['NASA', 'NOAA'],
     })
+    saveLaunch(newLaunch)
 }
 
 
 
-function existsLaunch(launchId) {
-    return launches.has(launchId)
+async function existsLaunch(launchId) {
+    return await launches.findOne({
+        flightNumber: launchId,
+    })
+    //return launches.has(launchId)
 }
 
-function abortLaunch(launchId) {
+async function abortLaunch(launchId) {
+    const aborted = await launches.updateOne({
+        flightNumber: launchId
+    }, {
+        succes: false,
+        upcoming: false
+    })
+    return aborted.modifiedCount == 1
     // launches.delete(launchId) //delete to launch
-    const aborted = launches.get(launchId)
-    aborted.upcoming = false
-    aborted.succes = false
-    return aborted
+    // const aborted = launches.get(launchId)
+    // aborted.upcoming = false
+    // aborted.succes = false
+    // return aborted
 }
 
 module.exports = {
