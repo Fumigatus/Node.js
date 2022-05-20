@@ -22,7 +22,7 @@ async function httpAddNewLaunch(request, response) {
     //checking launch date is valid or not
     if (isNaN(launch.launchDate)) {
         return response.status(400).json({
-            error: 'Invalid launch date.'
+            error: 'Invalid launch date'
         })
     }
     //second way to check launch date
@@ -38,19 +38,19 @@ async function httpAddNewLaunch(request, response) {
 async function httpAbortLaunch(request, response){
     const launchId= Number(request.params.id)
 
-    const existlaunch= existsLaunch(launchId)
+    const existlaunch= await existsLaunch(launchId)
     if(!existlaunch){
         return response.status(404).json({
             error: "The flight doesn't exist."
         })
     }
+
     const abortedLaunch = await abortLaunch(launchId)
     if (!abortedLaunch){
         return response.status(400).json({
             error: "The launch not aborted"
         })
     }
-    
 
     return response.status(200).json(abortedLaunch)
 }
