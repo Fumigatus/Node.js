@@ -4,6 +4,7 @@ const axios = require('axios')
 
 // const launches = new Map()
 const DEFAULT_FLIGHT_NUMBER = 100;
+const SPACEX_API_URL = 'https://api.spacexdata.com/v4/launches/query'
 // let lastFlightNumber = 100
 
 const launch = {
@@ -69,18 +70,24 @@ async function addNewLaunchDB(launch) {
     saveLaunch(newLaunch)
 }
 
+async function findLaunch(launch) {
+    return await launches.findOne(launch)
+}
+
 async function existsLaunch(launchId) {
-    return await launches.findOne({
+    return await findLaunch({
         flightNumber: launchId,
     })
     //return launches.has(launchId)
 }
 
-async function loadLaunchesData() {
-    const SPACEX_API_URL = 'https://api.spacexdata.com/v4/launches/query'
+async function populateLaunches() {
+    console.log('Downloading launches data.')
+
     const response = await axios.post(SPACEX_API_URL, {
         query: {},
         options: {
+            pagination: false,
             populate: [
                 {
                     path: 'rocket',
@@ -114,9 +121,24 @@ async function loadLaunchesData() {
         }
         console.log(`${launch.flightNumber} ${launch.mission}`)
     }
-
-    console.log('Downloading launches data.')
 }
+
+async function loadLaunchesData() {
+    const firstLaunch = await findLaunch({
+        flightNumber: 1,
+        mission: 'FalconSat',
+        rocket: 'Falcon 1'
+    })
+
+    if (firstLaunch) {
+        console.log('Launches up to date')
+        return
+    } else {
+        await populateLaunches()
+    }
+}
+
+
 
 async function abortLaunch(launchId) {
     const aborted = await launches.updateOne({
