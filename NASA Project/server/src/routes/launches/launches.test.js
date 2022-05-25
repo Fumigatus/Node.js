@@ -15,7 +15,7 @@ describe('Launches API', () => {
     describe('Test GET /launches', () => {
         test('It should respond 200', async () => {
             const response = await request(app)
-                .get('/launches')
+                .get('/v1/launches')
                 .expect(200)
                 .expect('Content-Type', /json/)
             // expect(response.statusCode).toBe(200)
@@ -44,7 +44,7 @@ describe('Launches API', () => {
         }
         test('It should respond 201', async () => {
             const response = await request(app)
-                .post('/launches')
+                .post('/v1/launches')
                 .send(launch)
                 .expect('Content-Type', /json/)
                 .expect(201)
@@ -58,7 +58,7 @@ describe('Launches API', () => {
 
         test('Missing required properties control', async () => {
             const response = await request(app)
-                .post('/launches')
+                .post('/v1/launches')
                 .send(launchWithoutDate)
                 .expect(400)
             expect(response.body).toStrictEqual({
@@ -67,7 +67,7 @@ describe('Launches API', () => {
         })
         test('Invalid date control', async () => {
             const response = await request(app)
-                .post('/launches')
+                .post('/v1/launches')
                 .send(launchInvalidDate)
                 .expect(400)
             expect(response.body).toStrictEqual({
