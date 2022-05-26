@@ -30,15 +30,6 @@ async function getAllLaunches() {
 }
 
 async function saveLaunch(launch) {
-    const planet = await planets.findOne({
-        keplerName: launch.target
-    })
-
-    if (!planet) {
-        throw new Error('No habitable planet with this name')
-    }
-
-
     await launches.updateOne({
         flightNumber: launch.flightNumber
     },
@@ -60,6 +51,14 @@ async function getLatestFlightNumber() {
 }
 
 async function addNewLaunchDB(launch) {
+    const planet = await planets.findOne({
+        keplerName: launch.target
+    })
+
+    if (!planet) {
+        throw new Error('No habitable planet with this name')
+    }
+
     const newFligthNumber = await getLatestFlightNumber() + 1
     const newLaunch = Object.assign(launch, {
         flightNumber: newFligthNumber,
@@ -102,6 +101,11 @@ async function populateLaunches() {
         }
     })
 
+    if (response != 200) {
+        console.log('Have a problem downlading data from SpaceX api')
+        throw new Error('Launch data download failed')
+    }
+
     const launchDocs = response.data.docs
 
     for (const launchDoc of launchDocs) {
@@ -120,6 +124,8 @@ async function populateLaunches() {
             customers: customers
         }
         console.log(`${launch.flightNumber} ${launch.mission}`)
+
+        await saveLaunch(launch)
     }
 }
 
