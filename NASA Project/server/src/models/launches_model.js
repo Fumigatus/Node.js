@@ -24,11 +24,12 @@ saveLaunch(launch)
 
 async function getAllLaunches(skip, limit) {
     return await launches
-    .find({}, {
-        '_id': 0, '__v': 0,
-    })
-    .skip(skip)
-    .limit(limit);
+        .find({}, {
+            '_id': 0, '__v': 0,
+        })
+        .sort({ flightNumber: 1})//-1 to descending
+        .skip(skip)
+        .limit(limit);
     // return Array.from(launches.values())
 }
 
