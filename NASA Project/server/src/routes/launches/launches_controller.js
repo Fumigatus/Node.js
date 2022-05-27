@@ -1,12 +1,18 @@
-const { 
+const {
     getAllLaunches,
     addNewLaunchDB,
     existsLaunch,
     abortLaunch,
 } = require('../../models/launches_model')
 
+const {
+    Pagination
+} = require('../../services/query')
+
 async function httpGetAllLaunches(request, response) {
-    return response.status(200).json(await getAllLaunches())
+    const { skip, limit } = Pagination(request.query)
+    const launches = await getAllLaunches(skip, limit)
+    return response.status(200).json(launches)
 }
 
 async function httpAddNewLaunch(request, response) {
@@ -35,18 +41,18 @@ async function httpAddNewLaunch(request, response) {
     return response.status(201).json(launch)
 }
 
-async function httpAbortLaunch(request, response){
-    const launchId= Number(request.params.id)
+async function httpAbortLaunch(request, response) {
+    const launchId = Number(request.params.id)
 
-    const existlaunch= await existsLaunch(launchId)
-    if(!existlaunch){
+    const existlaunch = await existsLaunch(launchId)
+    if (!existlaunch) {
         return response.status(404).json({
             error: "The flight doesn't exist."
         })
     }
 
     const abortedLaunch = await abortLaunch(launchId)
-    if (!abortedLaunch){
+    if (!abortedLaunch) {
         return response.status(400).json({
             error: "The launch not aborted"
         })

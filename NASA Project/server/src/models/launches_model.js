@@ -22,10 +22,13 @@ const launch = {
 // launches.get(100)
 saveLaunch(launch)
 
-async function getAllLaunches() {
-    return await launches.find({}, {
+async function getAllLaunches(skip, limit) {
+    return await launches
+    .find({}, {
         '_id': 0, '__v': 0,
-    });
+    })
+    .skip(skip)
+    .limit(limit);
     // return Array.from(launches.values())
 }
 
@@ -66,7 +69,7 @@ async function addNewLaunchDB(launch) {
         succes: true,
         customers: ['NASA', 'NOAA'],
     })
-    saveLaunch(newLaunch)
+    await saveLaunch(newLaunch)
 }
 
 async function findLaunch(launch) {
@@ -81,8 +84,7 @@ async function existsLaunch(launchId) {
 }
 
 async function populateLaunches() {
-    console.log('Downloading launches data.')
-
+    console.log('Downloading launch data...');
     const response = await axios.post(SPACEX_API_URL, {
         query: {},
         options: {
@@ -92,27 +94,29 @@ async function populateLaunches() {
                     path: 'rocket',
                     select: {
                         name: 1
-                    },
+                    }
+                },
+                {
                     path: 'payloads',
                     select: {
                         'customers': 1
                     }
-                }]
+                }
+            ]
         }
-    })
+    });
 
-    if (response != 200) {
-        console.log('Have a problem downlading data from SpaceX api')
-        throw new Error('Launch data download failed')
+    if (response.status !== 200) {
+        console.log('Have a problem downlading data from SpaceX api');
+        throw new Error('Launch data download failed');
     }
 
-    const launchDocs = response.data.docs
-
+    const launchDocs = response.data.docs;
     for (const launchDoc of launchDocs) {
-        const payloads = launchDoc['payloads']
-        const customers = payloads.flatMap(payload => {
-            return payload['customers']
-        })
+        const payloads = launchDoc['payloads'];
+        const customers = payloads.flatMap((payload) => {
+            return payload['customers'];
+        });
 
         const launch = {
             flightNumber: launchDoc['flight_number'],
@@ -120,12 +124,13 @@ async function populateLaunches() {
             rocket: launchDoc['rocket']['name'],
             launchDate: launchDoc['date_local'],
             upcoming: launchDoc['upcoming'],
-            succes: launchDoc['succes'],
-            customers: customers
-        }
-        console.log(`${launch.flightNumber} ${launch.mission}`)
+            success: launchDoc['success'],
+            customers,
+        };
 
-        await saveLaunch(launch)
+        console.log(`${launch.flightNumber} ${launch.mission}`);
+
+        await saveLaunch(launch);
     }
 }
 
