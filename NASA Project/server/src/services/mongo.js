@@ -1,6 +1,4 @@
 const mongoose = require('mongoose')
-const pass= require('./mongodbpass')
-
 const MONGO_URL = process.env.MONGO_URL
 
 mongoose.connection.once('open',()=>{
