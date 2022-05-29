@@ -2,8 +2,11 @@ const fs = require('fs')
 const https = require('https')
 const path = require('path')
 const express = require('express')
+const helmet = require('helmet')
 
 const app = express()
+app.use(helmet())
+
 const PORT = 3000
 
 app.get('/secret', (request, response) => {
