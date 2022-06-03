@@ -1,11 +1,11 @@
-const fs = require('fs');
-const https = require('https');
-const path = require('path');
-const express = require('express');
-const helmet = require('helmet');
-const passport = require('passport');
-const { Strategy } = require('passport-google-oauth20');
-const cookieSession = require('cookie-session');
+const fs = require('fs')
+const https = require('https')
+const path = require('path')
+const express = require('express')
+const helmet = require('helmet')
+const passport = require('passport')
+const { Strategy } = require('passport-google-oauth20')
+const cookieSession = require('cookie-session') //version should be 0.5.x or have to use express session same code 
 require('dotenv').config()
 
 
@@ -25,8 +25,8 @@ const AUTH_OPTIONS = {
 }
 
 function verifyCallback(accessToken, refreshToken, profile, done) {
-    console.log('Google profile', profile);
-    done(null, profile);
+    console.log('Google profile', profile)
+    done(null, profile)
 }
 
 
@@ -34,7 +34,7 @@ passport.use(new Strategy(AUTH_OPTIONS, verifyCallback));
 
 //save the session to cookie
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user.id)
 })
 
 //read the session from to cookie
@@ -56,6 +56,14 @@ app.use(cookieSession({
     keys: [config.COOKIE_KEY_1, config.COOKIE_KEY_2],
 }))
 
+// cookieSession alternative
+/*app.use(expressSession({
+    secret: [config.COOKIE_KEY_1, config.COOKIE_KEY_2],
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
+ }))*/
+
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -66,7 +74,7 @@ function checkLoggedIn(req, res, next) {
     if (!isLoggedIn) {
         return res.status(401).json({
             error: 'You have to log in for access',
-        });
+        })
     }
     next()
 }
