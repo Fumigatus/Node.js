@@ -61,11 +61,12 @@ app.use(passport.session())
 
 
 function checkLoggedIn(req, res, next) {
-    const isLoggedIn = true //TODO: check with google account
+    console.log('Current user is:', req.user);
+    const isLoggedIn = req.isAuthenticated() && req.user;
     if (!isLoggedIn) {
-        return res
-            .status(401)
-            .send('You have to log in for access')
+        return res.status(401).json({
+            error: 'You have to log in for access',
+        });
     }
     next()
 }
