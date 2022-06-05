@@ -85,7 +85,8 @@ app.get('/auth/google',
     }))
 
 app.get('/auth/logout', (req, res) => {
-
+    req.logOut()
+    return res.redirect('/')
 })
 
 app.get('/auth/google/callback',
