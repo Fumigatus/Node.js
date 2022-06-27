@@ -15,5 +15,5 @@ server.listen(PORT, () => {
 })
 
 io.on('connection', (socket) => {
-    console.log('a user connected')
+    console.log(`a user connecteed as id= ${socket.id}`)
 })
