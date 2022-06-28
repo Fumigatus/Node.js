@@ -22,7 +22,7 @@ io.on('connection', (socket) => {
     socket.on('ready', () => {
         readyPlayerCount++;
         if(readyPlayerCount===2){
-            io.emit(`startGame ${socket.id}`)
+            io.emit('startGame',socket.id)
         }
     })
 })
