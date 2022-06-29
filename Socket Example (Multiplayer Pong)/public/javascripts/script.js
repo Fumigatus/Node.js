@@ -168,8 +168,8 @@ function loadGame() {
   socket.emit('ready')
 }
 
-function startGame(){
-  paddleIndex = isReferee ? 0: 1;
+function startGame() {
+  paddleIndex = isReferee ? 0 : 1;
   window.requestAnimationFrame(animate);
   canvas.addEventListener('mousemove', (e) => {
     playerMoved = true;
@@ -180,6 +180,9 @@ function startGame(){
     if (paddleX[paddleIndex] > (width - paddleWidth)) {
       paddleX[paddleIndex] = width - paddleWidth;
     }
+    socket.emit('paddleMove', {
+      xposition: paddleX[paddleIndex],
+    })
     // Hide Cursor
     canvas.style.cursor = 'none';
   });
@@ -199,4 +202,7 @@ socket.on('startGame', (refereeId) => {
   startGame()
 })
 
-console.log(isReferee)
+socket.on('paddleMove', (paddleData) => {
+  const oppenentPaddleIndex = 1 - paddleIndex
+  paddleX[oppenentPaddleIndex] = paddleData.xposition
+})
