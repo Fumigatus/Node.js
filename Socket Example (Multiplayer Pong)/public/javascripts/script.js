@@ -167,9 +167,9 @@ function ballBoundaries() {
 function animate() {
   if (isReferee) {
     ballMove();
-    renderCanvas();
+    ballBoundaries();
   }
-  ballBoundaries();
+  renderCanvas();
   window.requestAnimationFrame(animate);
 }
 
@@ -193,8 +193,8 @@ function startGame() {
       paddleX[paddleIndex] = width - paddleWidth;
     }
     socket.emit('paddleMove', {
-      xposition: paddleX[paddleIndex],
-    })
+      xPosition: paddleX[paddleIndex],
+    });
     // Hide Cursor
     canvas.style.cursor = 'none';
   });
